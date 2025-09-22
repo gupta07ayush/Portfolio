@@ -1,70 +1,182 @@
-# Getting Started with Create React App
+Here is the documentation for your portfolio project in markdown format, detailing how to run it locally with both Yarn and Docker.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+-----
 
-## Available Scripts
+### 🛠️ Local Development & Deployment
 
-In the project directory, you can run:
+This portfolio project is built using Node.js and React, managed with Yarn. You can run it locally either through the standard Yarn commands or by using Docker.
 
-### `npm start`
+-----
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+### **Running Locally with Yarn**
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+1.  **Clone the Repository**:
 
-### `npm test`
+    ```bash
+    git clone <repository_url>
+    ```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2.  **Install Dependencies**: Navigate to the project directory and install all required packages.
 
-### `npm run build`
+    ```bash
+    yarn install
+    ```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+3.  **Run the Project**:
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+    ```bash
+    yarn start
+    ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+    The application will now be running and accessible at `http://localhost:3000`.
 
-### `npm run eject`
+-----
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### **Using Docker**
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The project includes a `Dockerfile` for easy containerization, allowing you to run the application in an isolated environment.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+1.  **Build the Docker Image**:
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+    ```bash
+    docker build -t <image_name> .
+    ```
 
-## Learn More
+    *Replace `<image_name>` with a name for your Docker image (e.g., `my-portfolio`).*
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2.  **Run the Docker Container**:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    ```bash
+    docker run -p 3000:3000 <image_name>
+    ```
 
-### Code Splitting
+    The application will be available at `http://localhost:3000` on your machine.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+-----
 
-### Analyzing the Bundle Size
+### **Pushing to Docker Hub**
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+If you want to share your container image, you can push it to Docker Hub.
 
-### Making a Progressive Web App
+1.  **Tag the Image**:
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+    ```bash
+    docker tag <image_name>:<tag> <dockerhub_username>/<repo_name>:<tag>
+    ```
 
-### Advanced Configuration
+    *Replace `<image_name>`, `<tag>`, `<dockerhub_username>`, and `<repo_name>` with your specific details.*
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+2.  **Push the Image**:
 
-### Deployment
+    ```bash
+    docker push <dockerhub_username>/<repo_name>:<tag>
+    ```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+    Your container image is now available on your Docker Hub repository.
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+    ## 🚀 Deployment Guide: From Local to GitHub Pages
+
+This guide outlines the steps to successfully deploy this React application to GitHub Pages. The key to a smooth deployment is correctly configuring the build and routing to work with a static hosting environment.
+
+-----
+
+### Step 1: Install the `gh-pages` Package
+
+First, you need to install the `gh-pages` package as a development dependency. This tool automates the process of creating a build and pushing it to a special `gh-pages` branch. Run the command locally on terminal
+
+```bash
+yarn add gh-pages --dev
+```
+
+-----
+
+### Step 2: Configure `package.json` for Deployment
+
+Next, you'll update your `package.json` file to include the project's homepage URL and add the necessary deployment scripts.
+
+1.  **Add `homepage` URL**: Add a `homepage` field to the top-level of your `package.json` file. Replace `<username>` and `<repository-name>` with your GitHub details.
+
+    ```json
+    "homepage": "https://<username>.github.io/<repository-name>/",
+    ```
+
+2.  **Add Deployment Scripts**: Add the `predeploy` and `deploy` scripts to the `scripts` section. The `predeploy` script runs the build command, and `deploy` pushes the build to the `gh-pages` branch.
+
+    ```json
+    "scripts": {
+      "start": "craco start",
+      "build": "craco build",
+      "test": "craco test",
+      "predeploy": "yarn build",
+      "deploy": "gh-pages -d build"
+    },
+    ```
+
+-----
+
+### Step 3: Update React Router for Static Hosting
+
+To fix the `No routes matched location` error, we switched from `BrowserRouter` to `HashRouter`. This is crucial because GitHub Pages is a static server that can't handle client-side routing. `HashRouter` uses the URL hash (`#`) to manage routes, which is ignored by the server.
+
+  - In your main routing file (`App.js`), replace `BrowserRouter` with `HashRouter`.
+
+<!-- end list -->
+
+```jsx
+import { HashRouter as Router, Routes, Route } from "react-router-dom";
+//...
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        {/* Other routes */}
+      </Routes>
+    </Router>
+  );
+}
+```
+
+-----
+
+### Step 4: Fix Asset Paths
+
+To resolve `404 Not Found` errors for images and other assets, we use the `process.env.PUBLIC_URL` variable. This ensures asset paths are correctly built for both local development and the live GitHub Pages site.
+
+  - For any assets (images, PDFs) in your `public` folder, update the `src` or `href` attribute to use `process.env.PUBLIC_URL`.
+
+<!-- end list -->
+
+```jsx
+// For images
+<img src={`${process.env.PUBLIC_URL}/assets/profile_photo.jpg`} alt="Profile" />
+
+```
+
+-----
+
+### Step 5: Deploy the Project
+
+Once all the above steps are completed, run a single command to build and deploy your application.
+
+```bash
+yarn deploy
+```
+
+This command will:
+
+1.  Run the build script (`yarn build`).
+2.  Push the contents of the `build` directory to the `gh-pages` branch.
+
+-----
+
+### Step 6: Final GitHub Pages Configuration
+
+After the deployment is complete, go to your GitHub repository and finalize the settings:
+
+1.  Navigate to **Settings** \> **Pages**.
+2.  Under "Build and deployment," ensure the **Source** is set to **`gh-pages` branch** and the folder is set to **`/ (root)`**.
+
+Your site will now be live and fully functional at your GitHub Pages URL.
