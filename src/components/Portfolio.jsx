@@ -405,7 +405,7 @@ const Portfolio = () => {
             <div className="photo-blend relative">
               <div className="holo-card p-8">
                 <img 
-                  src="/assets/profile_photo.jpg"
+                  src={`${process.env.PUBLIC_URL}/assets/profile_photo.jpg`}
                   alt="Ayush Gupta - Cloud Engineer"
                   className="w-full max-w-md mx-auto"
                 />
