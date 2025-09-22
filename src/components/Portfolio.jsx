@@ -88,7 +88,7 @@ const Portfolio = () => {
   const handleDownloadResume = () => {
     // Create a link element and trigger download
     const link = document.createElement('a');
-    link.href = '/assets/Ayush_Gupta_Resume.pdf';
+    link.href = `${process.env.PUBLIC_URL}/assets/Ayush_Gupta_Resume.pdf`;
     link.download = 'Ayush_Gupta_Azure_Cloud_Resume.pdf';
     document.body.appendChild(link);
     link.click();
